@@ -6,7 +6,7 @@ const index = async () => {
     console.log(BASE_URL)
     const response = await axios.get(BASE_URL)
     console.log(response)
-    return response.data.allPets
+    return response.data.pets
   } catch (error) {
     console.error(error)
   }

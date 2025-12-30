@@ -1,21 +1,26 @@
 import { useEffect, useState } from 'react'
 import * as petService from './services/petService.js'
 import './App.css'
-
+import PetList from './components/petList/PetList'
 function App() {
   const [pets, setPets] = useState([])
 
   useEffect(() => {
     const getAllPets = async () => {
-      const data = await petService.index()
-      setPets(data)
-      console.log(data)
+      try {
+        const data = await petService.index()
+        setPets(data)
+        console.log(data )
+      } catch (error) {
+        console.error(error)
+      }
     }
     getAllPets()
   }, [])
+
   return (
     <>
-      <h1>hello</h1>
+    <PetList pets={pets} />
     </>
   )
 }
