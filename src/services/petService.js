@@ -11,4 +11,13 @@ const index = async () => {
     console.error(error)
   }
 }
-export { index }
+const show = async (id) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/${id}`)
+    console.log('Show response', response.data.pet)
+    return response.data.pet
+  } catch (error) {
+    console.error(error)
+  }
+}
+export { index, show }
