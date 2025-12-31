@@ -20,4 +20,23 @@ const show = async (id) => {
     console.error(error)
   }
 }
-export { index, show }
+const create = async (formState) => {
+  try {
+    const response = await axios.post(BASE_URL, formState)
+    // console.log(response.data.pets)
+    return response.data.pets
+  } catch (error) {
+    console.error(error)
+  }
+}
+const update = async (formState) => {
+  try {
+    const updated = await axios.put(`${BASE_URL}/${petId}`, formState)
+    // console.log(response.data.pets)
+    return updated.data.pets
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export { index, show, create, update }

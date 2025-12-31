@@ -1,34 +1,49 @@
-import React from 'react'
-import { useState, useEffect } from 'react'
-import * as petService from '../../services/petService.js'
-import { useParams } from 'react-router'
+import { useState, useEffect } from "react"
+import * as petService from '../../services/petService'
+import { Link, useParams, useNavigate } from "react-router"
 
-function PetDetail() {
+function PetDetail(props) {
+  const {findPetToUpdate} = props;
   const [pet, setPet] = useState(null)
   const { id } = useParams()
+  const navigate = useNavigate()
 
-  if (!id) return <h1>id does'nt exist</h1>
+  useEffect(
+    () => {
+      const getOnePet = async (id) => {
+        const pet = await petService.show(id)
+        setPet(pet)
+      }
 
-  useEffect(() => {
-    const getOnePet = async (id) => {
-      const pet = await petService.show(id)
-      console.log('pet', pet)
-      setPet(pet)
+      if(id) getOnePet(id)
+    }, [id]
+  )
+
+  const handleDelete = async () => {
+    const deletedPet = await petService.deleteOne(id)
+
+    if(deletedPet){
+      navigate('/')
+    }else{
+      console.log('something went wrong!')
     }
+  }
 
-    getOnePet(id)
-  }, [id])
-
-  if (!pet) return <h1>loading...</h1>  
+  if(!id) return <h1>Loading...</h1>
+  if (!pet) return <h1>Loading..</h1>
 
   return (
     <div>
-      <h1>pet Details</h1>
-      name: {pet.name}
-      <br />
-      age: {pet.age}
-      <br />
-      breed: {pet.breed}
+      <h1>{pet.name}</h1>
+      <h4>{pet.age}</h4>
+      <p>{pet.breed}</p>
+      <div>
+        <Link onClick={()=>  findPetToUpdate(id) } to={`/pets/${id}/update`}>Edit</Link>
+        <br />
+        <Link to={`/pets/${id}/edit`}>NEW Edit</Link>
+        <br />
+        <button onClick={handleDelete}>Delete</button>
+      </div>
     </div>
   )
 }
